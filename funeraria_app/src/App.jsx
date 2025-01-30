@@ -5,11 +5,13 @@ import {
   signInWithEmailAndPassword,
   signOut,
 } from "firebase/auth";
+import Profile from "./user/profile";
 
 const App = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [user, setUser] = useState(null);
+  const [showProfile, setShowProfile] = useState(false); // Controlar exibição do Profile
 
   // Função para registrar o usuário
   const handleRegister = async () => {
@@ -43,6 +45,12 @@ const App = () => {
   const handleLogout = async () => {
     await signOut(auth);
     setUser(null);
+    setShowProfile(false); // Esconde o perfil quando o usuário faz logout
+  };
+
+  // Alternar a visualização do perfil
+  const handleShowProfile = () => {
+    setShowProfile(true);
   };
 
   return (
@@ -63,12 +71,16 @@ const App = () => {
             onChange={(e) => setPassword(e.target.value)}
           />
           <button onClick={handleLogin}>Login</button>
-          <button onClick={handleRegister}>Register</button>
+          <button onClick={handleRegister}>Registrar</button>
         </div>
       ) : (
         <div>
-          <h2>Welcome, {user.email}</h2>
+          <h2>Bem-vindo, {user.email}</h2>
+          <button onClick={handleShowProfile}>Perfil de Usuário</button>
           <button onClick={handleLogout}>Logout</button>
+
+          {/* Exibe o componente Profile se o estado showProfile for verdadeiro */}
+          {showProfile && <Profile />}
         </div>
       )}
     </div>
