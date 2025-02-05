@@ -6,9 +6,10 @@ import {
   signInWithEmailAndPassword,
   signOut,
 } from "firebase/auth";
-import Profile from "./user/profile";
+import Profile from "./model/profile";
 import Contrato from "./pages/contrato";
 import ClientesList from "./pages/clientesList";
+
 import logo from "./assets/logo.png";
 
 const App = () => {
@@ -58,14 +59,15 @@ const App = () => {
           {user ? (
             <>
               <Link to="/contrato">
-                <button>Adicionar Cliente</button>
+                <button>Contrato</button>
               </Link>
               <Link to="/clientes">
-                <button>Ver Clientes</button>
+                <button>Listar Clientes</button>
               </Link>
               <Link to="/profile">
-                <button>Perfil</button>
+                <button>Minha Conta</button>
               </Link>
+
               <button onClick={handleLogout}>Logout</button>
             </>
           ) : (
@@ -102,6 +104,7 @@ const App = () => {
         <Routes>
           {user && <Route path="/contrato" element={<Contrato />} />}
           {user && <Route path="/clientes" element={<ClientesList />} />}
+
           {user && <Route path="/profile" element={<Profile />} />}
         </Routes>
       </div>

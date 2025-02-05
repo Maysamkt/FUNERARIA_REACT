@@ -1,58 +1,62 @@
 import { useEffect, useState } from "react";
-import {
-  collection,
-  getDocs,
-  deleteDoc,
-  doc,
-  updateDoc,
-} from "firebase/firestore";
-import { db } from "../db/firebase";
+import { fetchClientes, deleteCliente, updateCliente } from "../model/cliente";
 
 const ClientesList = () => {
   const [clientes, setClientes] = useState([]);
-
-  // Função para buscar todos os clientes
-  const fetchClientes = async () => {
-    try {
-      const querySnapshot = await getDocs(collection(db, "clientes"));
-      const clientesData = querySnapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
-      setClientes(clientesData);
-    } catch (error) {
-      console.error("Erro ao buscar clientes: ", error);
-    }
-  };
+  const [editandoId, setEditandoId] = useState(null);
+  const [formData, setFormData] = useState({
+    nome: "",
+    email: "",
+    telefone: "",
+    endereco: "",
+    dataContrato: "",
+  });
 
   useEffect(() => {
-    fetchClientes();
+    fetchClientes().then(setClientes);
   }, []);
 
-  // Função para deletar um cliente
+  // Função para deletar cliente
   const handleDelete = async (id) => {
-    try {
-      await deleteDoc(doc(db, "clientes", id));
-      setClientes(clientes.filter((cliente) => cliente.id !== id));
-    } catch (error) {
-      console.error("Erro ao deletar cliente: ", error);
-    }
+    await deleteCliente(id);
+    setClientes(clientes.filter((cliente) => cliente.id !== id));
   };
 
-  // Função para atualizar um cliente (exemplo atualizando o nome)
-  const handleUpdate = async (id, updatedData) => {
-    try {
-      const clienteRef = doc(db, "clientes", id);
-      await updateDoc(clienteRef, updatedData);
-      // Atualiza o estado local para refletir as mudanças
-      setClientes(
-        clientes.map((cliente) =>
-          cliente.id === id ? { ...cliente, ...updatedData } : cliente
-        )
-      );
-    } catch (error) {
-      console.error("Erro ao atualizar cliente: ", error);
-    }
+  // Função para abrir o formulário de edição
+  const handleEdit = (cliente) => {
+    setEditandoId(cliente.id);
+    setFormData({
+      nome: cliente.nome || "",
+      email: cliente.email || "",
+      telefone: cliente.telefone || "",
+      endereco: cliente.endereco || "",
+      dataContrato: cliente.dataContrato?.toDate
+        ? cliente.dataContrato.toDate().toISOString().split("T")[0]
+        : "",
+    });
+  };
+
+  // Função para atualizar o estado do formulário
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  // Função para salvar as alterações
+  const handleSave = async () => {
+    await updateCliente(editandoId, {
+      ...formData,
+      dataContrato: formData.dataContrato
+        ? new Date(formData.dataContrato)
+        : null,
+    });
+
+    setClientes(
+      clientes.map((cliente) =>
+        cliente.id === editandoId ? { ...cliente, ...formData } : cliente
+      )
+    );
+
+    setEditandoId(null);
   };
 
   return (
@@ -64,36 +68,83 @@ const ClientesList = () => {
         <ul>
           {clientes.map((cliente) => (
             <li key={cliente.id} style={{ marginBottom: "1rem" }}>
-              <p>
-                <strong>Nome:</strong> {cliente.nome}
-              </p>
-              <p>
-                <strong>Email:</strong> {cliente.email}
-              </p>
-              <p>
-                <strong>Telefone:</strong> {cliente.telefone}
-              </p>
-              <p>
-                <strong>Endereço:</strong> {cliente.endereco}
-              </p>
-              <p>
-                <strong>Data do Contrato:</strong>{" "}
-                {cliente.dataContrato && cliente.dataContrato.toDate
-                  ? cliente.dataContrato.toDate().toLocaleDateString()
-                  : cliente.dataContrato}
-              </p>
-              <button onClick={() => handleDelete(cliente.id)}>Deletar</button>
-              {/* Exemplo simples: atualiza o nome através de um prompt */}
-              <button
-                onClick={() => {
-                  const novoNome = prompt("Novo nome:", cliente.nome);
-                  if (novoNome !== null && novoNome.trim() !== "") {
-                    handleUpdate(cliente.id, { nome: novoNome });
-                  }
-                }}
-              >
-                Atualizar Nome
-              </button>
+              {editandoId === cliente.id ? (
+                // Formulário de Edição com melhor organização
+                <div className="form-container">
+                  <label>Nome:</label>
+                  <input
+                    type="text"
+                    name="nome"
+                    value={formData.nome}
+                    onChange={handleChange}
+                  />
+
+                  <label>Email:</label>
+                  <input
+                    type="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                  />
+
+                  <label>Telefone:</label>
+                  <input
+                    type="text"
+                    name="telefone"
+                    value={formData.telefone}
+                    onChange={handleChange}
+                  />
+
+                  <label>Endereço:</label>
+                  <input
+                    type="text"
+                    name="endereco"
+                    value={formData.endereco}
+                    onChange={handleChange}
+                  />
+
+                  <label>Data do Contrato:</label>
+                  <input
+                    type="date"
+                    name="dataContrato"
+                    value={formData.dataContrato}
+                    onChange={handleChange}
+                  />
+
+                  <div className="form-buttons">
+                    <button onClick={handleSave}>Salvar</button>
+                    <button onClick={() => setEditandoId(null)}>
+                      Cancelar
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                // Exibição dos dados do cliente
+                <div>
+                  <p>
+                    <strong>Nome:</strong> {cliente.nome}
+                  </p>
+                  <p>
+                    <strong>Email:</strong> {cliente.email}
+                  </p>
+                  <p>
+                    <strong>Telefone:</strong> {cliente.telefone}
+                  </p>
+                  <p>
+                    <strong>Endereço:</strong> {cliente.endereco}
+                  </p>
+                  <p>
+                    <strong>Data do Contrato:</strong>{" "}
+                    {cliente.dataContrato && cliente.dataContrato.toDate
+                      ? cliente.dataContrato.toDate().toLocaleDateString()
+                      : cliente.dataContrato}
+                  </p>
+                  <button onClick={() => handleDelete(cliente.id)}>
+                    Deletar
+                  </button>
+                  <button onClick={() => handleEdit(cliente)}>Alterar</button>
+                </div>
+              )}
             </li>
           ))}
         </ul>
