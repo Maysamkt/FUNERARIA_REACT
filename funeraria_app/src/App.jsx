@@ -1,3 +1,4 @@
+import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import { useState } from "react";
 import { auth } from "./db/firebase";
 import {
@@ -6,14 +7,15 @@ import {
   signOut,
 } from "firebase/auth";
 import Profile from "./user/profile";
+import Contrato from "./pages/contrato";
+import ClientesList from "./pages/clientesList";
+import logo from "./assets/logo.png";
 
 const App = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [user, setUser] = useState(null);
-  const [showProfile, setShowProfile] = useState(false); // Controlar exibição do Profile
 
-  // Função para registrar o usuário
   const handleRegister = async () => {
     try {
       const userCredential = await createUserWithEmailAndPassword(
@@ -27,7 +29,6 @@ const App = () => {
     }
   };
 
-  // Função para fazer login
   const handleLogin = async () => {
     try {
       const userCredential = await signInWithEmailAndPassword(
@@ -41,49 +42,75 @@ const App = () => {
     }
   };
 
-  // Função para fazer logout
   const handleLogout = async () => {
     await signOut(auth);
     setUser(null);
-    setShowProfile(false); // Esconde o perfil quando o usuário faz logout
-  };
-
-  // Alternar a visualização do perfil
-  const handleShowProfile = () => {
-    setShowProfile(true);
   };
 
   return (
-    <div>
-      <h1>Firebase Authentication</h1>
-      {!user ? (
-        <div>
-          <input
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-          <input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-          <button onClick={handleLogin}>Login</button>
-          <button onClick={handleRegister}>Registrar</button>
+    <Router>
+      {/* Cabeçalho fixo */}
+      <header>
+        <div className="logo-container">
+          <img src={logo} alt="Logo" className="logo" width={"800px"} />
         </div>
-      ) : (
-        <div>
-          <h2>Bem-vindo, {user.email}</h2>
-          <button onClick={handleShowProfile}>Perfil de Usuário</button>
-          <button onClick={handleLogout}>Logout</button>
+        <nav>
+          {user ? (
+            <>
+              <Link to="/contrato">
+                <button>Adicionar Cliente</button>
+              </Link>
+              <Link to="/clientes">
+                <button>Ver Clientes</button>
+              </Link>
+              <Link to="/profile">
+                <button>Perfil</button>
+              </Link>
+              <button onClick={handleLogout}>Logout</button>
+            </>
+          ) : (
+            <>
+              <h2>Faça Login ou Registre-se para ter acesso</h2>
+            </>
+          )}
+        </nav>
+      </header>
 
-          {/* Exibe o componente Profile se o estado showProfile for verdadeiro */}
-          {showProfile && <Profile />}
-        </div>
-      )}
-    </div>
+      {/* Conteúdo Principal */}
+      <div className="main-content">
+        {!user ? (
+          <div>
+            <input
+              type="email"
+              placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+            <input
+              type="password"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            <button onClick={handleLogin}>Login</button>
+            <button onClick={handleRegister}>Registrar</button>
+          </div>
+        ) : (
+          <h2>Bem-vindo, {user.email}</h2>
+        )}
+
+        <Routes>
+          {user && <Route path="/contrato" element={<Contrato />} />}
+          {user && <Route path="/clientes" element={<ClientesList />} />}
+          {user && <Route path="/profile" element={<Profile />} />}
+        </Routes>
+      </div>
+
+      {/* Rodapé */}
+      <footer>
+        <p>&copy; 2025 - FoiDeBase Funerária</p>
+      </footer>
+    </Router>
   );
 };
 
