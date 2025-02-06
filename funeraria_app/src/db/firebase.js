@@ -3,12 +3,12 @@ import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBKjVqgxi9RkazvI6nw48yPLl5MLvS4cPE",
-  authDomain: "funeraria-dbe6f.firebaseapp.com",
-  projectId: "funeraria-dbe6f",
-  storageBucket: "funeraria-dbe6f.firebasestorage.app",
-  messagingSenderId: "795859051674",
-  appId: "1:795859051674:web:ec732afea0cb14df4d6b23",
+  apiKey: "sua_chave",
+  authDomain: "seu_domínio",
+  projectId: "id_projeto",
+  storageBucket: "ref_balde",
+  messagingSenderId: "id_envio_mensagem",
+  appId: "id_aplicação",
 };
 
 // Inicializando o Firebase
