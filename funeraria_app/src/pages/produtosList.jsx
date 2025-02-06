@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { fetchProdutos, deleteProduto, updateProduto } from "../model/produto";
+import "../styles/produtosList.css"
 
 const ProdutosList = () => {
   const [produtos, setProdutos] = useState([]);
@@ -48,7 +49,7 @@ const ProdutosList = () => {
               <p>
                 <strong>Preço:</strong> R$ {produto.preco}
               </p>
-              <button onClick={() => handleDelete(produto.id)}>Deletar</button>
+              <button id="delete" onClick={() => handleDelete(produto.id)}>Deletar</button>
               <button onClick={() => handleUpdate(produto.id)}>Alterar</button>
             </li>
           ))}
