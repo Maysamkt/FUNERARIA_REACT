@@ -22,7 +22,7 @@ Antes de rodar o projeto, certifique-se de que você tem o **Node.js** instalado
    No terminal, use o comando abaixo para clonar o repositório:
 
    ```bash
-   git clone <URL do seu repositório>
+   git clone https://github.com/Maysamkt/FUNERARIA_REACT
    
 2. **Instale as dependências**:
    ```bash
