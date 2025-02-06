@@ -2,6 +2,10 @@
 
 Este projeto é uma aplicação web para gerenciar contratos e clientes de uma funerária, com funcionalidades de cadastro de clientes, gestão de contratos e produtos.
 
+Projeto desenvolvido por **Leonan Damasceno** e **Maysa Santos** para a matéria de Banco de Dados II do Instituto Federal Goiano - Campus Urutaí.
+
+Repositório GitHub: [https://github.com/Maysamkt/FUNERARIA_REACT](https://github.com/Maysamkt/FUNERARIA_REACT)
+
 ## Pré-requisitos
 
 Antes de rodar o projeto, certifique-se de que você tem o **Node.js** instalado em sua máquina.
