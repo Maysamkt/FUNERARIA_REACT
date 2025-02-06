@@ -9,7 +9,9 @@ import {
 import Profile from "./model/profile";
 import Contrato from "./pages/contrato";
 import ClientesList from "./pages/clientesList";
-
+import ProdutosList from "./pages/produtosList";
+import CadastroProduto from "./pages/cadastrarProduto";
+import ContratoFeito from "./pages/contratoFeito";
 import logo from "./assets/logo.png";
 
 const App = () => {
@@ -67,7 +69,12 @@ const App = () => {
               <Link to="/profile">
                 <button>Minha Conta</button>
               </Link>
-
+              <Link to="/produtos">
+                <button>Listar Produtos</button>
+              </Link>
+              <Link to="/produtos/cadastro">
+                <button>Cadastrar Produtos</button>
+              </Link>
               <button onClick={handleLogout}>Logout</button>
             </>
           ) : (
@@ -104,7 +111,12 @@ const App = () => {
         <Routes>
           {user && <Route path="/contrato" element={<Contrato />} />}
           {user && <Route path="/clientes" element={<ClientesList />} />}
+          {user && (
+            <Route path="/produtos/cadastro" element={<CadastroProduto />} />
+          )}
 
+          {user && <Route path="/contrato-feito" element={<ContratoFeito />} />}
+          {user && <Route path="/produtos" element={<ProdutosList />} />}
           {user && <Route path="/profile" element={<Profile />} />}
         </Routes>
       </div>
