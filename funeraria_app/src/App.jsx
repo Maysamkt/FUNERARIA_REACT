@@ -96,13 +96,14 @@ const App = () => {
               onChange={(e) => setEmail(e.target.value)}
             />
             <input
+              id="pass"
               type="password"
-              placeholder="Password"
+              placeholder="Senha"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
-            <button onClick={handleLogin}>Login</button>
-            <button onClick={handleRegister}>Registrar</button>
+            <button id="Login" onClick={handleLogin}>Login</button>
+            <button id="Regis" onClick={handleRegister}>Registrar</button>
           </div>
         ) : (
           <h2>Bem-vindo, {user.email}</h2>

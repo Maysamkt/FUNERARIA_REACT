@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { fetchClientes, deleteCliente, updateCliente } from "../model/cliente";
+import "../styles/clientesList.css"
 
 const ClientesList = () => {
   const [clientes, setClientes] = useState([]);
@@ -139,7 +140,7 @@ const ClientesList = () => {
                       ? cliente.dataContrato.toDate().toLocaleDateString()
                       : cliente.dataContrato}
                   </p>
-                  <button onClick={() => handleDelete(cliente.id)}>
+                  <button id="delete" onClick={() => handleDelete(cliente.id)}>
                     Deletar
                   </button>
                   <button onClick={() => handleEdit(cliente)}>Alterar</button>

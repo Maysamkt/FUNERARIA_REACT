@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { addProduto } from "../model/produto";
 import { useNavigate } from "react-router-dom";
+import "../styles/cadastrarProduto.css"
 
 const CadastroProduto = () => {
   const [produto, setProduto] = useState({
@@ -51,6 +52,7 @@ const CadastroProduto = () => {
         <div className="form-group">
           <label>Nome:</label>
           <input
+            id="name"
             type="text"
             name="nome"
             value={produto.nome}
@@ -61,6 +63,7 @@ const CadastroProduto = () => {
         <div className="form-group">
           <label>Descrição:</label>
           <textarea
+            id="desc"
             name="descricao"
             value={produto.descricao}
             onChange={handleChange}
@@ -70,6 +73,7 @@ const CadastroProduto = () => {
         <div className="form-group">
           <label>Preço (R$):</label>
           <input
+            id="price"
             type="number"
             name="preco"
             step="0.01"
@@ -85,6 +89,7 @@ const CadastroProduto = () => {
             value={produto.categoria}
             onChange={handleChange}
             required
+            id="cat"
           >
             <option value="">Selecione</option>
             <option value="caixão">Caixão</option>

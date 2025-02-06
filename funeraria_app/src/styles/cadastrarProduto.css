@@ -1,0 +1,19 @@
+#cat {
+    margin-left: 1%;
+    margin-bottom: 3%;
+}
+
+#price {
+    margin-left: 0.5%;
+    padding-left: 9px;
+}
+
+#desc {
+    resize: none;
+    margin-left: 1%;
+}
+
+#name {
+    margin-left: 4.1%;
+    padding-left: 9px;
+}

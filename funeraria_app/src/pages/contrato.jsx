@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { addCliente, fetchClientes, updateCliente } from "../model/cliente";
 import { fetchProdutos } from "../model/produto";
 import { useNavigate } from "react-router-dom";
+import "../styles/contrato.css"
 
 const Contrato = () => {
   const [clientes, setClientes] = useState([]);
@@ -126,7 +127,7 @@ const Contrato = () => {
         {/* Seleção do Cliente */}
         <div className="form-group">
           <label>Selecionar Cliente:</label>
-          <select value={clienteSelecionado} onChange={handleSelectChange}>
+          <select id="cli" value={clienteSelecionado} onChange={handleSelectChange}>
             <option value="">Escolha um cliente</option>
             <option value="novo">Cadastrar Novo Cliente</option>
             {clientes.map((cliente) => (
@@ -198,7 +199,7 @@ const Contrato = () => {
         {/* Seleção de Produtos */}
         <div className="form-group">
           <label>Selecionar Produtos:</label>
-          <select onChange={(e) => handleProdutoChange(e.target.value)}>
+          <select id="prod" onChange={(e) => handleProdutoChange(e.target.value)}>
             <option value="">Escolha um produto</option>
             {produtos.map((produto) => (
               <option key={produto.id} value={produto.id}>
@@ -262,7 +263,7 @@ const Contrato = () => {
           />
         </div>
 
-        <button type="submit">Salvar Contrato</button>
+        <button id="salvar" type="submit">Salvar Contrato</button>
       </form>
     </div>
   );
